@@ -1,5 +1,5 @@
 <p align="center">
-<img src="icons/Balance_logo" alt="Balance" width="100" border="0" /></p>
+<img src="icons/Balance_logo.pdf" alt="Balance" width="100" border="0" /></p>
 <br>
 <p align="center">
 Benchmark in ALgorithmic And Natural data ComprEssion
@@ -41,7 +41,7 @@ chmod +x run.sh
 bash run.sh
 ```
 
-To create a graph of Compression of a given image, move to the **src/** directory and run run_images.sh:
+To create a graph of Compression of a given image, move to the **src/** directory and run **run_image.sh**:
 
 ```
 cd src/
@@ -51,14 +51,13 @@ bash run_images.sh Complete/Path/of/the/Image
 
 ## CA Creation
 
-If you wish to create other Binary cellular automaton arrays or images you may do so by using the file ca.py in the **CA_Creator/** folder.
+If you wish to create other Binary cellular automaton arrays or images you may do so by using the file **ca.py** in the **CA_Creator/** folder.
 Requirments:
 
 - Python 3.6
 - Numpy
 - matplotlib
 - PIL
-- matplotlib
 
 ## Warnings:
 Although it is possible to run this program with CMIX, by changing the variable USECMIX on **src/Compressors.sh** and on **src/run_images**, this action is not recommended unless you have enough computational resources.

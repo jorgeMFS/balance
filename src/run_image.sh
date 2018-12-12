@@ -127,6 +127,7 @@ fi
 EXT=exe;
 pattern=$imgdir*.paq*
 files=( $pattern )
+rm $imgdir*.paq*
 # ==============================================================================
 
 for executable in $PAQS_COMPRESSOR_PATH*.${EXT}; do
@@ -161,13 +162,11 @@ for executable in $PAQS_COMPRESSOR_PATH*.${EXT}; do
 
 done
 
-#!/bin/bash
+
 ##############################################3
 #variables
 counter=0
 ##############################################3
-
-
 
 Alf=`../Compressors/goose-info < $convertedfilepath |grep "Alphabet size"| awk -F ' ' '{print $3}'`
 
@@ -180,7 +179,7 @@ tail -n +2 $x >> QWERTY
 
 CompressorName=${metricsFileName%.*}
 CompName=${CompressorName//_}
-
+counter=0
 ###################################################
 # Creating Reports
 ###################################################
@@ -197,15 +196,15 @@ while read p; do
     #Compression            
     echo "${compress}" "${size}"
     
-    log2=`echo 'l('$Alf')/l(2)' | bc -l`
-    bytes=`perl -w -e "use POSIX; print ceil($log2)"`
+    log2=`echo "scale=3 ; l($Alf)/l(2)" | bc -l`
+    echo $log2 
+    base=`echo "scale=3 ; $size*$log2" | bc -l`
+    echo $base 
     
-    base=$size*$bytes
-    compRatio=$compress/$base
-    RATIO=`echo "scale=3 ; $compRatio" | bc`
-    echo "$log2 $compRatio $RATIO "
+    RATIO=`echo "scale=3 ; $compress*8/$base" | bc -l`
+    echo "$log2 $RATIO "
     echo ${METRICSPATH}REPORTCOMP
-   
+
     #TimeParsing to seconds
     minuts=`echo $tm | awk -F 'm' '{print $1}'`
     seconds=`echo $tm | awk -F 'm' '{print $2}'`
@@ -248,9 +247,9 @@ gnuplot << EOF
    set format '%g'
    set xlabel "Compressor" 
    set datafile separator "\t"
-   plot "REPORTCOMP" using 1:3:xtic(4) with boxes linecolor '#FF4136' title "Compressibility of Image"  
+   plot "REPORTCOMP" using 1:3:xtic(4) with boxes title "Compressibility of Image"  linecolor '#FF4136'
    set ylabel "Time in seconds (s)"
-   plot "REPORTCOMP" using 1:2:xtic(4) with boxes linecolor '#FF4136' title "Compression time of Image"
+   plot "REPORTCOMP" using 2:xtic(4) with boxes title "Compression time of Image" linecolor '#FF4136'
 
 EOF
 

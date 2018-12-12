@@ -40,18 +40,18 @@ for x in $METRICSPATH*.txt;do
             #Compression            
             echo "${compress}" "${size}"
             
-            log2=`echo 'l('$Alf')/l(2)' | bc -l`
+            log2=`echo "scale=3 ; l($Alf)/l(2)" | bc -l` 
 
-            bytes=`perl -w -e "use POSIX; print ceil($log2)"`
-            
-            base=$size*$bytes
-            compRatio=$compress/$base
-            RATIO=`echo "scale=3 ; $compRatio" | bc`
+            base=`echo "scale=3 ; $size*$log2" | bc -l`
+
+            RATIO=`echo "scale=3 ; $compress*8/$base" | bc -l`
+
             echo -n "$RATIO "
             echo -e "$counter\t$RATIO\t\"$CompName\"" >> $SAVEMETRICSPATH$REPORTCOMP
-
-
+            ####### 
             #TimeParsing to seconds
+            #######
+
             minuts=`echo $tm | awk -F 'm' '{print $1}'`
             seconds=`echo $tm | awk -F 'm' '{print $2}'`
             seconds=${seconds//s}
