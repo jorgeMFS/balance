@@ -1,5 +1,5 @@
 <p align="center">
-<img src="icons/logo.pdf" alt="Balance" width="50" border="0" /></p>
+<img src="icons/logo.png" alt="Balance" width="50" border="0" /></p>
 <br>
 <p align="center">
 Benchmark in ALgorithmic And Natural data ComprEssion
