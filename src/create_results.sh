@@ -53,8 +53,8 @@ bash avg_bytes.sh $US_METRICSPATH $US_Filename $SAVEPATH
 bash avg_NC.sh $SAVEPATH $CA_INITNAME
 bash avg_NC.sh $SAVEPATH $DR_INITNAME
 bash avg_NC.sh $SAVEPATH $NA_INITNAME
+
 bash avg_NC.sh $SAVEPATH $CR_INITNAME
 bash avg_NC.sh $SAVEPATH $US_INITNAME
-
 
 bash graph.sh

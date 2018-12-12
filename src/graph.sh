@@ -148,11 +148,11 @@ gnuplot << EOF
    plot "CR_DATA_CR2_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR2"
    plot "CR_DATA_CR3_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR3"
    plot "CR_DATA_CR4_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR4"
-   plot "CR_DATA_CR5_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR4"
-   plot "CR_DATA_CR6_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR5"
-   plot "CR_DATA_CR7_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR6"
-   plot "CR_DATA_CR8_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR7"
-   plot "CR_DATA_CR9_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR8"
+   plot "CR_DATA_CR5_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR5"
+   plot "CR_DATA_CR6_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR6"
+   plot "CR_DATA_CR7_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR7"
+   plot "CR_DATA_CR8_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR8"
+   plot "CR_DATA_CR9_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image CR9"
 EOF
 
 
@@ -266,11 +266,11 @@ gnuplot << EOF
    plot "DR_DATA_DR2_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR2"
    plot "DR_DATA_DR3_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR3"
    plot "DR_DATA_DR4_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR4"
-   plot "DR_DATA_DR5_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR4"
-   plot "DR_DATA_DR6_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR5"
-   plot "DR_DATA_DR7_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR6"
-   plot "DR_DATA_DR8_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR7"
-   plot "DR_DATA_DR9_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR8"
+   plot "DR_DATA_DR5_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR5"
+   plot "DR_DATA_DR6_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR6"
+   plot "DR_DATA_DR7_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR7"
+   plot "DR_DATA_DR8_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR8"
+   plot "DR_DATA_DR9_Compression" using 1:2:xtic(3) with boxes linecolor '#FF4136' title "Compressibility of Image DR9"
 EOF
 
 
@@ -593,6 +593,8 @@ gnuplot << EOF
    plot "US_DATA_US8_time" using 1:2:xtic(3) with boxes linecolor '#001f3f' title "Compression Time Image US8"
    plot "US_DATA_US9_time" using 1:2:xtic(3) with boxes linecolor '#001f3f' title "Compression Time Image US9"
 EOF
+
+
 
 for x in *.pdf;do
     mv $x ../../Results/ 
