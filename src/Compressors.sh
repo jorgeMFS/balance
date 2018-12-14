@@ -27,12 +27,13 @@ if [[ "$RUN_RM" -eq "1" ]]; then
 fi
 
 # ==============================================================================
-# Parameters
+Parameters
 BZIP="bzip2.txt";
 GZIP="gzip.txt";
 LZMA="lzma.txt";
 XZ="xz.txt";
-ZSTD="zstd.txt"
+ZSTD="zstd.txt";
+BDM="bdm.txt";
 
 if [[ "$USECMIX" -eq "1" ]]; then     
         CMIX="cmix.txt";
@@ -44,10 +45,12 @@ echo "ImgName;Size;Time;CompSize" > ${METRICSPATH}$XZ;
 echo "ImgName;Size;Time;CompSize" > ${METRICSPATH}$BZIP;
 echo "ImgName;Size;Time;CompSize" > ${METRICSPATH}$GZIP;
 echo "ImgName;Size;Time;CompSize" > ${METRICSPATH}$LZMA;
+echo "ImgName;Size;Time;bdmvalue" > ${METRICSPATH}$BDM;
 
 
-for filename in ${IMG_PATH}*; do
+for filename in ${IMG_PATH}*.PROCESSED.bin; do
         imgfilename=$(basename -- "$filename");        
+        imagetruename=`echo $imgfilename | awk -F '.' '{print $1}'`;
         decompressed=`ls -la $filename | awk '{print $5;}'`;
 
         #ZSTD
@@ -60,8 +63,8 @@ for filename in ${IMG_PATH}*; do
 
         zstd -d --rm $compressedfilename
 
-        echo "ZSTD-->${imgfilename%.*}; $decompressed; $TIME; $compressed";
-        echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$ZSTD;
+        echo "ZSTD-->$imagetruename; $decompressed; $TIME; $compressed";
+        echo "$imagetruename; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$ZSTD;
 
         #XZ
         echo "======================XZ======================"
@@ -73,8 +76,8 @@ for filename in ${IMG_PATH}*; do
         compressed=`ls -la $compressedfilename | awk '{ print $5;}'`;
         xz -d $compressedfilename
 
-        echo "XZ-->${imgfilename%.*}; $decompressed; $TIME; $compressed";
-        echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$XZ;
+        echo "XZ-->$imagetruename; $decompressed; $TIME; $compressed";
+        echo "$imagetruename; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$XZ;
         
         #BZIP
         echo "======================BZIP======================"
@@ -87,8 +90,8 @@ for filename in ${IMG_PATH}*; do
         compressed=`ls -la $compressedfilename | awk '{print $5;}'`;
         bzip2 -d $compressedfilename;
 
-        echo "BZIP-->${imgfilename%.*};$decompressed;$TIME;$compressed";
-        echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$BZIP;
+        echo "BZIP-->$imagetruename;$decompressed;$TIME;$compressed";
+        echo "$imagetruename; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$BZIP;
         
         #GZIP
         echo "======================GZIP======================"
@@ -102,7 +105,7 @@ for filename in ${IMG_PATH}*; do
         gzip -d $compressedfilename;
 
         echo "GZIP-->${imgfilename%.*};$decompressed;$TIME;$compressed";
-        echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$GZIP;
+        echo "$imagetruename; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$GZIP;
 
         #LZMA
         echo "======================LZMA======================"
@@ -114,8 +117,8 @@ for filename in ${IMG_PATH}*; do
         compressed=`ls -la $compressedfilename | awk '{print $5;}'`;
         lzma -d $compressedfilename;
         
-        echo "LZMA-->${imgfilename%.*};$decompressed;$TIME;$compressed";
-        echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$LZMA;
+        echo "LZMA-->$imagetruename;$decompressed;$TIME;$compressed";
+        echo "$imagetruename; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$LZMA;
 
 
         #CMIX
@@ -128,11 +131,23 @@ for filename in ${IMG_PATH}*; do
                 rm TTT;
                 
                 compressed=`ls -la $compressedfilename | awk '{print $5;}'`;
-                echo "CMIX-->${imgfilename%.*};$decompressed;$TIME;$compressed";
-                echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$CMIX;
+                echo "CMIX-->$imagetruename;$decompressed;$TIME;$compressed";
+                echo "$imagetruename; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$CMIX;
 
                 rm $compressedfilename;
         fi
+        
+        #BDM
+        echo "======================BDM======================"
+        (time ./BDM_SRC/BDM.exe < $filename > JJJ) &> TTT;
+
+        TIME=`cat TTT | grep "real" | awk '{print $2}'`;
+        bdm_value=`cat JJJ`;
+        rm  JJJ;
+        echo "BDM-->$imagetruename;$decompressed;$TIME;$bdm_value";
+        echo "$imagetruename; $decompressed; $TIME; $bdm_value" >> ${METRICSPATH}$BDM;
+        printf "Done!\n";
+
 done
 
 #PAQS
@@ -155,26 +170,28 @@ for executable in $PAQS_COMPRESSOR_PATH*.${EXT}; do
         echo "ImgName;Size;Time;CompSize" > $METRICSPATH${filep%.*}.txt
         
         echo $METRICSPATH${filep%.*}.txt
-        for filename in $IMG_PATH*; do
+        for filename in $IMG_PATH*.PROCESSED.bin; do
+                echo $filename
                 imgfilename=$(basename -- "$filename");
+                imagetruename=`echo $imgfilename | awk -F '.' '{print $1}'`
                 echo "FILENAME IMAGE--> $filename ... IMAGE NAME: $imgfilename ";
                 
                 decompressed=`ls -la $filename | awk '{print $5;}'`;
-                              
                 (time "" | $executable -8 $filename) &> TTT;
                 TIME=`cat TTT | grep "real" | awk '{print $2}'`;
                 rm TTT;
-                
+
                 #echo $IMG_PATH*.paq*
                 if [ ! -f $IMG_PATH*.paq* ]; then
                          echo "File not found!";
                          rm $METRICSPATH${filep%.*}.txt;
+                         ls $IMG_PATH*.paq*
                 else                        
                          fileWithPattern="${files[0]}";
                          echo "FILE FOUND!!! -->" $fileWithPattern;
                          compressed=`ls -la $fileWithPattern | awk '{print $5;}'`;
                          rm $fileWithPattern;
-                         echo "${imgfilename%.*}; $decompressed; $TIME; $compressed" >> $METRICSPATH${filep%.*}.txt;              
+                         echo "$imagetruename; $decompressed; $TIME; $compressed" >> $METRICSPATH${filep%.*}.txt;              
                 fi 
         done
 done

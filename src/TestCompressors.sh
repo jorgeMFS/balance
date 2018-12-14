@@ -29,10 +29,10 @@ bash Compressors.sh $IMG_PATH_CA $METRICSPATH_CA
 bash Compressors.sh $IMG_PATH_CR $METRICSPATH_CR
 
 #DR
-# bash Compressors.sh $IMG_PATH_DR $METRICSPATH_DR
+bash Compressors.sh $IMG_PATH_DR $METRICSPATH_DR
 
 #NA
-# bash Compressors.sh $IMG_PATH_NA $METRICSPATH_NA
+bash Compressors.sh $IMG_PATH_NA $METRICSPATH_NA
 
 #US
-# bash Compressors.sh $IMG_PATH_US $METRICSPATH_US
+bash Compressors.sh $IMG_PATH_US $METRICSPATH_US

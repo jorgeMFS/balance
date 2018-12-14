@@ -95,7 +95,6 @@ gnuplot << EOF
    set output "CA_time.pdf"
    set boxwidth 0.5
    set xtics 5 rotate by -45
-   set ytics 0,5,100
    set size ratio 0.6
    set style line 101 lc rgb '#000000' lt 1 lw 3
    set key outside horiz center top
@@ -213,7 +212,6 @@ gnuplot << EOF
    set output "CR_time.pdf"
    set boxwidth 0.5
    set xtics 5 rotate by -45
-   set ytics 0,5,100
    set size ratio 0.6
    set style line 101 lc rgb '#000000' lt 1 lw 3
    set key outside horiz center top
@@ -331,7 +329,6 @@ gnuplot << EOF
    set output "DR_time.pdf"
    set boxwidth 0.5
    set xtics 5 rotate by -45
-   set ytics 0,5,100
    set size ratio 0.6
    set style line 101 lc rgb '#000000' lt 1 lw 3
    set key outside horiz center top
@@ -451,7 +448,6 @@ gnuplot << EOF
    set output "NA_time.pdf"
    set boxwidth 0.5
    set xtics 5 rotate by -45
-   set ytics 0,5,100
    set size ratio 0.6
    set style line 101 lc rgb '#000000' lt 1 lw 3
    set key outside horiz center top
@@ -569,7 +565,6 @@ gnuplot << EOF
    set output "US_time.pdf"
    set boxwidth 0.5
    set xtics 5 rotate by -45
-   set ytics 0,5,100
    set size ratio 0.6
    set style line 101 lc rgb '#000000' lt 1 lw 3
    set key outside horiz center top

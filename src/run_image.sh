@@ -16,6 +16,7 @@ USECMIX=0
 ImagePath=$1
 METRICSPATH=../metrics/Other/;
 SAVERESULTS=INPUT_IMG_RESULTS
+#===========================================
 
 CMIX_COMPRESSOR_PATH=../Compressors/cmix/;
 PAQS_COMPRESSOR_PATH=../Compressors/paqs/;
@@ -24,14 +25,35 @@ if [[ "$RUN_RM" -eq "1" ]]; then
 fi
 
 echo "ImgName;Size;Time;CompSize" > $METRICSPATH$SAVERESULTS
+#===========================================
 
 imgfilename=$(basename -- "$ImagePath");
 imgdir=$(dirname "${ImagePath}")/
-convertedfile="${imgfilename%.*}.pgm"
-convertedfilepath="$imgdir$convertedfile"
+#===========================================
+
+echo "Running $ImagePath ...";
+rm -f $ImagePath.PROCESSED.bin;
+convert -colorspace gray $ImagePath TEMP-IMG.PGM;
+width=$(identify -format "%w" "TEMP-IMG.PGM")> /dev/null;
+height=$(identify -format "%h" "TEMP-IMG.PGM")> /dev/null;
+printf "Geometry format (Width x Height): $width x $height\n";
+excedent_width=`echo "$width%4" | bc`;
+excedent_height=`echo "$height%4" | bc`;
+printf "Excedent width: $excedent_width\n";
+printf "Excedent height: $excedent_height\n";
+new_width=`echo "$width-$excedent_width" | bc`;
+new_height=`echo "$height-$excedent_height" | bc`;
+convert -crop $new_width'x'$new_height-0-0 -compress none TEMP-IMG.PGM TEMP2-IMG.PGM
+printf "New geometry format (Width x Height): $new_width x $new_height\n";
+printf "Binarizing image ...\n";
+tail -n +4 TEMP2-IMG.PGM | ./bitbit/target/release/bitbit $new_width > $ImagePath.PROCESSED.bin;
+rm -f TEMP-IMG.PGM TEMP2-IMG.PGM;
+printf "Done!\n";
+# =======================
+convertedfilepath=$ImagePath.PROCESSED.bin;
 
 echo "$ImagePath, $imgfilename, ${imgfilename%.*}, $convertedfilepath"
-convert $ImagePath $convertedfilepath
+
 ls $imgdir
 
 decompressed=`ls -la $convertedfilepath | awk '{print $5;}'`;
@@ -102,6 +124,20 @@ lzma -d $compressedfilename;
 
 echo "LZMA-->${imgfilename%.*};$decompressed;$TIME;$compressed";
 echo "LZMA; ${imgfilename%.*}; $decompressed; $TIME; $compressed" >> ${METRICSPATH}$SAVERESULTS;
+
+
+
+#BDM
+echo "======================BDM======================"
+(time ./BDM_SRC/BDM.exe < $convertedfilepath > JJJ) &> TTT;
+
+TIME=`cat TTT | grep "real" | awk '{print $2}'`;
+bdm_value=`cat JJJ`;
+rm  JJJ;
+echo "BDM-->${imgfilename%.*};$decompressed;$TIME;$bdm_value";
+echo "${imgfilename%.*}; $decompressed; $TIME; $bdm_value" >> ${METRICSPATH}$SAVERESULTS;
+printf "Done!\n";
+
 
 #CMIX
 if [[ "$USECMIX" -eq "1" ]]; then  
